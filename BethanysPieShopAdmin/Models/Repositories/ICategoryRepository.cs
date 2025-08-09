@@ -1,0 +1,12 @@
+﻿namespace BethanysPieShopAdmin.Models.Repositories
+{
+    public interface ICategoryRepository
+    {
+       IEnumerable<Category> GetAllCategories();
+        
+        //async method
+       Task<IEnumerable<Category>> GetAllCategoriesAsync(); 
+
+       Task<Category?> GetCategoryByIdAsync(int id);
+    }
+}
