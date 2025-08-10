@@ -1,6 +1,8 @@
-﻿using BethanysPieShopAdmin.Models.Repositories;
+﻿using BethanysPieShopAdmin.Models;
+using BethanysPieShopAdmin.Models.Repositories;
 using BethanysPieShopAdmin.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Threading.Tasks;
 
 namespace BethanysPieShopAdmin.Controllers
@@ -33,6 +35,30 @@ namespace BethanysPieShopAdmin.Controllers
             var selectedCategory = await _categoryRepository.GetCategoryByIdAsync(id.Value);
             return View(selectedCategory);
 
+        }
+        public IActionResult Add() { 
+        return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Add([Bind("CategoryName,Description,DateAdded")]Category category)
+        {
+
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    await _categoryRepository.AddCategoryAsync(category);
+                    return RedirectToAction("Index");
+                }
+
+            }
+            catch (Exception ex) {
+                ModelState.AddModelError("",$"Wrong format for category: {ex.Message}");
+            }
+
+            return View(category);
+           
         }
 
     }

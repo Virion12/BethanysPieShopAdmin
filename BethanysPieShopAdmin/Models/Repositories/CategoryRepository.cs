@@ -11,6 +11,19 @@ namespace BethanysPieShopAdmin.Models.Repositories
             _context = bPSDdContext;
         }
 
+        public async Task<int> AddCategoryAsync(Category category)
+        {
+             bool isany = await _context.Categories.AnyAsync(C => C.CategoryName == category.CategoryName);
+
+            if (isany)
+            {
+                throw new Exception("A categorry with this uid is already in the database");
+            }
+            _context.Categories.Add(category);
+            return await _context.SaveChangesAsync();
+
+        }
+
         public IEnumerable<Category> GetAllCategories()
         {
             return _context.Categories.OrderBy(c => c.CategoryId);
